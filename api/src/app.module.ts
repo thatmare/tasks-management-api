@@ -1,21 +1,24 @@
 // Import core libraries
-import { Module } from '@nestjs/common'
-import { ThrottlerModule } from '@nestjs/throttler'
+import { Module } from '@nestjs/common';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 // Import config files
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { throttlerConfig } from '@config/index'
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { throttlerConfig } from '@config/index';
+import { mongoConfig } from '@config/mongo.config';
 
 // Import own app files
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [throttlerConfig],
+      load: [throttlerConfig, mongoConfig],
     }),
     // Rate limit protection
     ThrottlerModule.forRootAsync({
@@ -27,6 +30,13 @@ import { AppService } from './app.service'
           limit: configService.get<number>('throttler.limit'),
         },
       ],
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('mongodb.uri'),
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AppController],

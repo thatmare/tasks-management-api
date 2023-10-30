@@ -23,11 +23,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'semi': 'off',
     '@typescript-eslint/semi': ['error', 'never'],
-    'prettier/prettier': [
-      'error',
-      {
-        'semi': false
-      }
-    ]
+    'prettier/prettier': 0,
   },
 };
