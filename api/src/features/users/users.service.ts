@@ -11,28 +11,23 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const newUser = this.userModel.create(createUserDto)
-    return newUser.save()
-  
-    //'This action adds a new user'
+    const createdUser = (await newUser).save()
+    return createdUser
   }
 
-  findAll() {
-    return this.userModel.find()
-    //`This action returns all users`;
-  }
+  // findAll() {
+  //   return this.userModel.find()
+  // }
 
-  findOne(id: number) {
-    return this.userModel.findById(id)
-    //`This action returns a #${id} user`;
-  }
+  // findOne(id: string) {
+  //   return this.userModel.findById(id)
+  // }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     return this.userModel.findByIdAndUpdate(id, updateUserDto)
-    //`This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return this.userModel.findByIdAndDelete(id)
-    //`This action removes a #${id} user`;
   }
 }
