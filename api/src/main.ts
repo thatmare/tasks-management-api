@@ -6,7 +6,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import helmet from 'helmet'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true })
+  const app = await NestFactory.create(AppModule, {
+    snapshot: true,
+    cors: true })
 
   // Setting up the app
   app.useGlobalPipes(new ValidationPipe())
