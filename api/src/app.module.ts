@@ -14,6 +14,8 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { UsersModule } from './features/users/users.module'
 import { AuthModule } from './features/auth/auth.module'
+import { EmailsModule } from './features/emails/emails.module'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 
 @Module({
   imports: [
@@ -48,6 +50,8 @@ import { AuthModule } from './features/auth/auth.module'
     }),
     UsersModule,
     AuthModule,
+    EmailsModule,
+    EventEmitterModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],

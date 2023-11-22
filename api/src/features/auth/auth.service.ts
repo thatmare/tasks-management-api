@@ -99,6 +99,27 @@ export class AuthService {
     }
   }
 
+  async getResetToken(email: string) {
+    const user = await this.userService.findByEmail(email)
+
+    if(!user) {
+      throw new BadRequestException('User does not exist')
+    }
+
+    const resetToken = await this.jwtService.signAsync(
+      {
+        sub: user._id,
+        email
+      },
+      {
+        secret: this.configService.get<string>('JWT_RESET_SECRET'),
+        expiresIn: '2h'
+      }
+    )
+
+    return resetToken
+  }
+
   async refreshTokens(userID: any, refreshToken: string) {
     const user = await this.userService.findOne(userID)
     console.log('user here', user)

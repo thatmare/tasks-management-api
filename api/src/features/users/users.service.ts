@@ -15,7 +15,7 @@ export class UsersService {
     return createdUser
   }
 
-  findAll() {
+  async findAll() {
     return this.userModel.find()
   }
 
