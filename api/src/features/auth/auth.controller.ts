@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Req} from '@nestjs/common'
+import { Controller, Get, Post, Body, UseGuards, Req, BadRequestException} from '@nestjs/common'
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger'
 import { Request } from 'express'
 import { AuthService } from './auth.service'
@@ -8,7 +8,7 @@ import { AccessTokenGuard, RefreshTokenGuard } from './guards'
 
 import { CreateUserDto } from '../users/dto/create-user.dto'
 
-import { TypedEventEmitter } from ''
+import { TypedEventEmitter } from '../emails/event-emitter/typed-event-emitter.class' 
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -53,11 +53,23 @@ export class AuthController {
     return this.authService.refreshTokens(userID, refreshToken)
   }
 
-  @Get('reset')
-  async resetPass() {
-    this.eventEmitter.emit('user.reset-password', {
-      name: 'Marissa'
-      //pending
-    })
+  @Post('reset-password')
+  async requestResetPasswordToken(@Body('email') email: string) {
+
+    try {
+      const resetToken = await this.authService.getResetToken(email)
+
+      this.eventEmitter.emit('auth.reset-password', {
+        name: 'Marissa',
+        email: email,
+        token: resetToken
+      })
+    } catch (error) {
+      if(error instanceof BadRequestException) {
+        throw new BadRequestException('User does not exist')
+      }
+
+      throw error
+    }
   }
 }

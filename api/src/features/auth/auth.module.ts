@@ -10,6 +10,7 @@ import { AccessTokenGuard } from './guards/access.token.guards'
 import { RefreshTokenGuard } from './guards/refresh.token.guards'
 
 import { UsersModule } from '../users/users.module'
+import { TypedEventEmitter } from '../emails/event-emitter/typed-event-emitter.class'
 
 @Module({
   imports: [UsersModule, JwtModule.register({})],
@@ -19,7 +20,8 @@ import { UsersModule } from '../users/users.module'
     AccessTokenStrategy,
     RefreshTokenStrategy,
     AccessTokenGuard,
-    RefreshTokenGuard
+    RefreshTokenGuard,
+    TypedEventEmitter
   ],
 })
 export class AuthModule {}

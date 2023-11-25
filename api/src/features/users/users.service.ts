@@ -11,8 +11,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const newUser = this.userModel.create(createUserDto)
-    const createdUser = (await newUser).save()
-    return createdUser
+    return newUser
   }
 
   async findAll() {
