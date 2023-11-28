@@ -12,6 +12,10 @@ import { mongoConfig } from '@config/mongo.config'
 // Import own app files
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { UsersModule } from './features/users/users.module'
+import { AuthModule } from './features/auth/auth.module'
+import { EmailsModule } from './features/emails/emails.module'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 
 @Module({
   imports: [
@@ -44,6 +48,10 @@ import { AppService } from './app.service'
       }),
       inject: [ConfigService],
     }),
+    UsersModule,
+    AuthModule,
+    EmailsModule,
+    EventEmitterModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],
