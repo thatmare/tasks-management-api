@@ -122,9 +122,6 @@ export class AuthService {
 
   async refreshTokens(userID: any, refreshToken: string) {
     const user = await this.userService.findOne(userID)
-    console.log('user here', user)
-    console.log("here token",refreshToken)
-    console.log("here id", userID)
 
     if(!user || !user.refreshToken) {
       throw new ForbiddenException('Access denied')

@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common'
-// import { CreateEmailDto } from './dto/create-email.dto';
-// import { UpdateEmailDto } from './dto/update-email.dto';
-import { MailerService } from '@nestjs-modules/mailer/dist'
+import { MailerService } from '@nestjs-modules/mailer'
 import { OnEvent } from '@nestjs/event-emitter'
 import { EventPayloads } from './interface/event-types.interface'
 
