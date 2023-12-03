@@ -17,6 +17,7 @@ import { AuthModule } from './features/auth/auth.module'
 import { EmailsModule } from './features/emails/emails.module'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { TicketsModule } from './features/tickets/tickets.module'
+import { CategoriesModule } from './features/categories/categories.module'
 
 @Module({
   imports: [
@@ -53,7 +54,8 @@ import { TicketsModule } from './features/tickets/tickets.module'
     AuthModule,
     EmailsModule,
     EventEmitterModule.forRoot(),
-    TicketsModule
+    TicketsModule,
+    CategoriesModule
   ],
   controllers: [AppController],
   providers: [AppService],

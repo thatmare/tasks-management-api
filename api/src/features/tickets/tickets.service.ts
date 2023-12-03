@@ -15,7 +15,7 @@ export class TicketsService {
     private ticketModel: Model<Ticket>,
     @InjectModel(DeletedTicket.name)
     private deletedTicketModel: Model<Ticket>,
-    private userService: UsersService
+    private userService: UsersService,
   ) {}
 
   async create(createTicketDto: CreateTicketDto, email: string) {
