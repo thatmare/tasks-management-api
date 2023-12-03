@@ -1,4 +1,4 @@
-import { IsString, IsISO8601, IsBoolean } from "class-validator"
+import { IsString, IsDate, IsBoolean, IsOptional} from "class-validator"
 
 export class CreateTicketDto {
     @IsString()
@@ -8,17 +8,18 @@ export class CreateTicketDto {
     description: string
 
     @IsString()
-    asignee: string
+    @IsOptional()
+    asignee?: string
 
     @IsString()
-    category: string
+    @IsOptional()
+    category?: string
 
-    @IsISO8601()
-    dueDate: Date
+    @IsDate()
+    @IsOptional()
+    dueDate?: Date
 
     @IsBoolean()
+    @IsOptional()
     isDeleted: boolean
-
-    @IsISO8601()
-    deletedAt: Date
 }

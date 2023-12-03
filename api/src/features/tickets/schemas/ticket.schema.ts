@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
 import { Document, HydratedDocument } from "mongoose"
 
-@Schema()
+@Schema({
+    timestamps: true
+})
 export class Ticket extends Document {
     @Prop({
         required: true,
@@ -15,25 +17,22 @@ export class Ticket extends Document {
     description: string
 
     @Prop({
-        required: true
+        default: ''
     })
-    asignee: string
+    asignee?: string
 
     @Prop()
-    category: string
+    category?: string
 
-    @Prop()
-    dueDate: Date
+    @Prop({
+        default: () => new Date().toISOString()
+    })
+    dueDate?: Date
 
     @Prop({
         default: false,
     })
     isDeleted: boolean
-
-    @Prop({
-        default: null
-    })
-    deletedAt: Date
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket)

@@ -6,6 +6,8 @@ import { TicketDocument, Ticket } from './schemas/ticket.schema'
 import { Model } from 'mongoose'
 import { DeletedTicket } from './schemas/deleted-ticket.schema'
 
+import { UsersService } from '../users/users.service'
+
 @Injectable()
 export class TicketsService {
   constructor(
@@ -13,9 +15,17 @@ export class TicketsService {
     private ticketModel: Model<Ticket>,
     @InjectModel(DeletedTicket.name)
     private deletedTicketModel: Model<Ticket>,
+    private userService: UsersService
   ) {}
 
-  async create(createTicketDto: CreateTicketDto) {
+  async create(createTicketDto: CreateTicketDto, email: string) {
+    const data = await this.userService.findByEmail(email)
+    const thisUser = `${data.firstName} ${data.lastName}`
+
+    if(!createTicketDto.asignee) {
+      createTicketDto.asignee = thisUser
+    }
+
     const newTicket = this.ticketModel.create(createTicketDto)
     return newTicket
   }
@@ -24,8 +34,19 @@ export class TicketsService {
     return this.ticketModel.find({ isDeleted: false })
   }
 
+  async findByUser(email: string) {
+    const data = await this.userService.findByEmail(email)
+    const thisUser = `${data.firstName} ${data.lastName}`
+
+    return this.ticketModel.find({ isDeleted: false, asignee: thisUser}).sort({ dueDate: -1 })
+  }
+
   async findOne(id: string) {
     return this.ticketModel.findOne({ _id: id, isDeleted: false })
+  }
+
+  async filterByCategory(aguacate: string) {
+    return this.ticketModel.aggregate([ { $match: { category: aguacate } }])
   }
 
   async update(id: string, updateTicketDto: UpdateTicketDto) {
@@ -42,10 +63,11 @@ export class TicketsService {
     )
   
     if (deletedTicket) {
-      const deletedTicketDoc = new this.deletedTicketModel(deletedTicket.toObject())
+      const deletedTicketDoc = new this.deletedTicketModel(
+        deletedTicket.toObject()
+        )
       await deletedTicketDoc.save()
-  
-      // Eliminar el documento de la colección principal después de guardarlo en la colección de eliminados
+
       await this.ticketModel.deleteOne({ _id: id })
     }
   
@@ -53,6 +75,3 @@ export class TicketsService {
   }
   
 }
-
-// manejo de errores
-// auth
