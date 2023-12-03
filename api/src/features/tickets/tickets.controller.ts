@@ -5,6 +5,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto'
 import { UpdateTicketDto } from './dto/update-ticket.dto'
 import { AccessTokenGuard } from '../auth/guards'
 import { Request } from 'express'
+import { PaginationParams } from './dto/pagination.dto'
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -30,8 +31,8 @@ export class TicketsController {
   @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get()
-  findAll() {
-    return this.ticketsService.findAll()
+  findAll(@Query() paginationParams: PaginationParams) {
+    return this.ticketsService.findAll(paginationParams)
   }
 
   @ApiBearerAuth()
@@ -47,7 +48,6 @@ export class TicketsController {
   @UseGuards(AccessTokenGuard)
   @Get(':category')
   findByCategory(@Param('category') category: string) {
-
     return this.ticketsService.filterByCategory(category)
   }
   

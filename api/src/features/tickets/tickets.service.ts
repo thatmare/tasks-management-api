@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { CreateTicketDto } from './dto/create-ticket.dto'
 import { UpdateTicketDto } from './dto/update-ticket.dto'
-import { TicketDocument, Ticket } from './schemas/ticket.schema'
+import { Ticket } from './schemas/ticket.schema'
 import { Model } from 'mongoose'
 import { DeletedTicket } from './schemas/deleted-ticket.schema'
 
@@ -30,10 +30,21 @@ export class TicketsService {
     return newTicket
   }
 
-  async findAll() {
-    return this.ticketModel.find({ isDeleted: false })
+  async findAll({ page = 1, limit = 10 }) {
+    const docsToSkip = (page - 1) * limit
+  
+    const findQuery = this.ticketModel
+      .find({ isDeleted: false })
+      .sort({ _id: 1 })
+      .skip(docsToSkip)
+      .limit(limit)
+  
+    const results = await findQuery
+    const count = await this.ticketModel.count()
+  
+    return { results, count }
   }
-
+  
   async findByUser(email: string) {
     const data = await this.userService.findByEmail(email)
     const thisUser = `${data.firstName} ${data.lastName}`
