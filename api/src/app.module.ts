@@ -16,6 +16,8 @@ import { UsersModule } from './features/users/users.module'
 import { AuthModule } from './features/auth/auth.module'
 import { EmailsModule } from './features/emails/emails.module'
 import { EventEmitterModule } from '@nestjs/event-emitter'
+import { TicketsModule } from './features/tickets/tickets.module'
+import { CategoriesModule } from './features/categories/categories.module'
 
 @Module({
   imports: [
@@ -51,7 +53,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
     UsersModule,
     AuthModule,
     EmailsModule,
-    EventEmitterModule.forRoot()
+    EventEmitterModule.forRoot(),
+    TicketsModule,
+    CategoriesModule
   ],
   controllers: [AppController],
   providers: [AppService],
