@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { CreateTicketDto } from './dto/create-ticket.dto'
 import { UpdateTicketDto } from './dto/update-ticket.dto'
 import { Ticket } from './schemas/ticket.schema'
+import { Category } from '../categories/schemas/category.schema'
 import { Model } from 'mongoose'
 import { DeletedTicket } from './schemas/deleted-ticket.schema'
 
@@ -26,7 +27,8 @@ export class TicketsService {
       createTicketDto.asignee = thisUser
     }
 
-    const newTicket = this.ticketModel.create(createTicketDto)
+    const newTicket = (await this.ticketModel.create(createTicketDto)).populate('category')
+
     return newTicket
   }
 
@@ -63,7 +65,7 @@ export class TicketsService {
   async update(id: string, updateTicketDto: UpdateTicketDto) {
     return this.ticketModel.findByIdAndUpdate(id, updateTicketDto, {
       new: true,
-    })
+    }).populate('category')
   }
 
   async softDelete(id: string) {

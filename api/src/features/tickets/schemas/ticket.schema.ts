@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
 import { Document, HydratedDocument } from "mongoose"
+import { Type } from "class-transformer"
+import { Category } from "@app/features/categories/schemas/category.schema"
+import * as mongoose from 'mongoose'
 
 @Schema({
     timestamps: true
@@ -21,7 +24,10 @@ export class Ticket extends Document {
     })
     asignee?: string
 
-    @Prop()
+    @Prop({
+        type: mongoose.Schema.Types.ObjectId, ref: Category.name
+    })
+    @Type(() => Category)
     category?: string
 
     @Prop({

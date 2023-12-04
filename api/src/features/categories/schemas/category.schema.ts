@@ -1,8 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
-import { Document, HydratedDocument } from "mongoose"
+import { Document, HydratedDocument, ObjectId} from "mongoose"
+import { Transform } from "class-transformer"
 
 @Schema()
 export class Category extends Document {
+    @Transform(({ value }) => value.toString())
+    _id: ObjectId
+
     @Prop({
         required: true,
         trim: true,
