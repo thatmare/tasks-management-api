@@ -4,12 +4,15 @@ import { UpdateCategoryDto } from './dto/update-category.dto'
 import { InjectModel } from '@nestjs/mongoose'
 import { Category } from './schemas/category.schema'
 import { Model } from 'mongoose'
+import { Ticket } from '../tickets/schemas/ticket.schema'
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectModel(Category.name) 
-    private categoryModel: Model<Category> 
+    private categoryModel: Model<Category>,
+    @InjectModel(Ticket.name)
+    private ticketModel: Model<Ticket>
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
@@ -37,6 +40,13 @@ export class CategoriesService {
   }
 
   async remove(id: string) {
-    return this.categoryModel.findByIdAndDelete(id)
+    const isCategoryRef = await this.ticketModel.exists({ category: id})
+
+    if(isCategoryRef) {
+      throw new Error('Hay referencia')
+    }
+
+    const deletedCategory = await this.categoryModel.findByIdAndDelete(id)
+    return deletedCategory
   }
 }
