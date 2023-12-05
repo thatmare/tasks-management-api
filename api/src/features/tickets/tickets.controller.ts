@@ -15,11 +15,11 @@ interface AuthenticatedRequest extends Request {
 }
 
 @ApiTags('tickets')
+@ApiBearerAuth()
 @Controller('tickets')
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Post()
   create(@Body() createTicketDto: CreateTicketDto, @Req() req: any) {
@@ -28,14 +28,12 @@ export class TicketsController {
     return this.ticketsService.create(createTicketDto, email)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get()
   findAll(@Query() paginationParams: PaginationParams) {
     return this.ticketsService.findAll(paginationParams)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get('user')
   findByUser(@Req() req: AuthenticatedRequest) {
@@ -44,7 +42,6 @@ export class TicketsController {
     return this.ticketsService.findByUser(email)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get(':category')
   findByCategory(@Param('category') category: string) {
@@ -52,21 +49,18 @@ export class TicketsController {
   }
   
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ticketsService.findOne(id)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
     return this.ticketsService.update(id, updateTicketDto)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

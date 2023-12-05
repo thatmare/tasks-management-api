@@ -37,10 +37,10 @@ export class User extends Document {
   })
   gender: string
 
-  @Prop({ default: Date.now })
+  @Prop()
   lastConnection: Date
 
-  @Prop({ default: Date.now })
+  @Prop()
   lastUpdate: Date
 
   @Prop()
@@ -50,3 +50,15 @@ export class User extends Document {
 export const UserSchema = SchemaFactory.createForClass(User)
 
 export type UserDocument = HydratedDocument<User>
+
+UserSchema.pre('save', function(next) {
+  this.lastUpdate = new Date()
+  next()
+})
+
+
+UserSchema.pre('findOneAndUpdate', function(next) {
+  const update = this.getUpdate() as any
+  update.lastUpdate = new Date()
+  next()
+})

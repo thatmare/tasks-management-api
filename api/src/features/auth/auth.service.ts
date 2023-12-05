@@ -47,11 +47,14 @@ export class AuthService {
       throw new BadRequestException('Password is incorrect')
     }
 
+    await this.userService.userLoggedIn(user._id)
+
     const tokens = await this.getTokens(user._id, user.email)
 
     await this.updateRefreshToken(user._id, tokens.refreshToken)
 
     return tokens
+   
   }
 
   async logOut(userID: string) {

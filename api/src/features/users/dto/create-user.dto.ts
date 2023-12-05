@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsISO8601 } from "class-validator" 
+import { IsString, IsEmail, IsISO8601} from "class-validator" 
 
 export class CreateUserDto {
     @IsString()
@@ -18,10 +18,4 @@ export class CreateUserDto {
 
     @IsString()
     gender: string
-
-    @IsISO8601()
-    lastConnection: Date
-
-    @IsISO8601()
-    lastUpdate: Date
 }
