@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query} from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query, ForbiddenException } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { TicketsService } from './tickets.service'
 import { CreateTicketDto } from './dto/create-ticket.dto'
@@ -47,23 +47,26 @@ export class TicketsController {
   findByCategory(@Param('category') category: string) {
     return this.ticketsService.filterByCategory(category)
   }
-  
-
-  @UseGuards(AccessTokenGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketsService.findOne(id)
-  }
 
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
+  async update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto, @Req() req: AuthenticatedRequest) {
+    const ticket = await this.ticketsService.findOne(id)
+    if(ticket.asignee['_id'] !== req.user['sub']) {
+      throw new ForbiddenException('You are not allowed to update this ticket')
+    }
+
     return this.ticketsService.update(id, updateTicketDto)
   }
 
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+    const ticket = await this.ticketsService.findOne(id)
+    if(ticket.asignee['_id'] !== req.user['sub']) {
+      throw new ForbiddenException('You are not allowed to delete this ticket')
+    }
+
     return this.ticketsService.softDelete(id)
   }
 }

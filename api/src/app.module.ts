@@ -18,6 +18,8 @@ import { EmailsModule } from './features/emails/emails.module'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { TicketsModule } from './features/tickets/tickets.module'
 import { CategoriesModule } from './features/categories/categories.module'
+import { HttpExceptionFilter } from 'filters/http-exception.filter'
+import { APP_FILTER } from '@nestjs/core'
 
 @Module({
   imports: [
@@ -58,6 +60,9 @@ import { CategoriesModule } from './features/categories/categories.module'
     CategoriesModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [{
+    provide: APP_FILTER,
+    useClass: HttpExceptionFilter
+  }, AppService],
 })
 export class AppModule {}
