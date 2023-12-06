@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query} from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query, ForbiddenException } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { TicketsService } from './tickets.service'
 import { CreateTicketDto } from './dto/create-ticket.dto'
@@ -15,11 +15,11 @@ interface AuthenticatedRequest extends Request {
 }
 
 @ApiTags('tickets')
+@ApiBearerAuth()
 @Controller('tickets')
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Post()
   create(@Body() createTicketDto: CreateTicketDto, @Req() req: any) {
@@ -28,14 +28,12 @@ export class TicketsController {
     return this.ticketsService.create(createTicketDto, email)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get()
   findAll(@Query() paginationParams: PaginationParams) {
     return this.ticketsService.findAll(paginationParams)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get('user')
   findByUser(@Req() req: AuthenticatedRequest) {
@@ -44,32 +42,31 @@ export class TicketsController {
     return this.ticketsService.findByUser(email)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get(':category')
   findByCategory(@Param('category') category: string) {
     return this.ticketsService.filterByCategory(category)
   }
-  
 
-  @ApiBearerAuth()
-  @UseGuards(AccessTokenGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketsService.findOne(id)
-  }
-
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
+  async update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto, @Req() req: AuthenticatedRequest) {
+    const ticket = await this.ticketsService.findOne(id)
+    if(ticket.asignee['_id'] !== req.user['sub']) {
+      throw new ForbiddenException('You are not allowed to update this ticket')
+    }
+
     return this.ticketsService.update(id, updateTicketDto)
   }
 
-  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+    const ticket = await this.ticketsService.findOne(id)
+    if(ticket.asignee['_id'] !== req.user['sub']) {
+      throw new ForbiddenException('You are not allowed to delete this ticket')
+    }
+
     return this.ticketsService.softDelete(id)
   }
 }

@@ -24,15 +24,19 @@ export class UsersService {
     return user
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.userModel.findById(id)
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return this.userModel.findByIdAndUpdate(id, updateUserDto)
+  async userLoggedIn(id: string) {
+    return this.userModel.updateOne({ _id: id }, { lastConnection: new Date() })
   }
 
-  remove(id: string) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return this.userModel.findOneAndUpdate({ _id: id }, updateUserDto)
+  }
+
+  async remove(id: string) {
     return this.userModel.findByIdAndDelete(id)
   }
 }

@@ -3,11 +3,8 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger'
 import { Request } from 'express'
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto/auth.dto'
-
 import { AccessTokenGuard, RefreshTokenGuard } from './guards'
-
 import { CreateUserDto } from '../users/dto/create-user.dto'
-
 import { TypedEventEmitter } from '../emails/event-emitter/typed-event-emitter.class' 
 
 interface AuthenticatedRequest extends Request {
