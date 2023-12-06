@@ -23,7 +23,7 @@ export class User extends Document {
   email: string
 
   @Prop({
-    required: true,
+    required: true
   })
   password: string
 
