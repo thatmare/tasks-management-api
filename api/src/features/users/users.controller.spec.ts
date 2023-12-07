@@ -4,24 +4,6 @@ import { UsersService } from './users.service'
 import { mock } from 'jest-mock-extended'
 import { RequestWithUser } from './users.controller'
 
-// describe('UsersController', () => {
-//   let controller: UsersController
-
-//   beforeEach(async () => {
-//     const module: TestingModule = await Test.createTestingModule({
-//       controllers: [UsersController],
-//       providers: [UsersService],
-//     }).compile()
-
-//     controller = module.get<UsersController>(UsersController)
-//   })
-
-//   it('should be defined', () => {
-//     expect(controller).toBeDefined()
-//   })
-// })
-
-// Mock UsersService
 const mockUsersService = {
   create: jest.fn(),
   findAll: jest.fn(),
@@ -30,7 +12,6 @@ const mockUsersService = {
   remove: jest.fn(),
 }
 
-// Mock RequestWithUser
 const mockRequestWithUser = mock<RequestWithUser>()
 mockRequestWithUser.user = { sub: 'test-sub' }
 
