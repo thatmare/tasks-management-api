@@ -36,7 +36,6 @@ export class AuthController {
   @ApiBearerAuth()
   @Get('logout')
   logOut(@Req() req: AuthenticatedRequest) {
-    console.log(req.user)
     return this.authService.logOut(req.user['sub'])
   }
 
