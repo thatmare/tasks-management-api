@@ -21,7 +21,7 @@ export class AuthService {
       throw new BadRequestException('User already exists')
     }
 
-    const hash = await this.hasData(createUserDto.password)
+    const hash = await this.hashData(createUserDto.password)
     const newUser = await this.userService.create({
       ...createUserDto,
       password: hash
@@ -58,12 +58,12 @@ export class AuthService {
     return this.userService.update(userID, { refreshToken: null })
   }
 
-  async hasData(data: string) {
+  async hashData(data: string) {
     return await argon2.hash(data)
   }
   
   async updateRefreshToken(userID: any, refreshToken: any) {
-    const hashedRefreshToken = await this.hasData(refreshToken)
+    const hashedRefreshToken = await this.hashData(refreshToken)
     await this.userService.update(userID, {
       refreshToken: hashedRefreshToken,
     })

@@ -7,7 +7,7 @@ import { AccessTokenGuard } from '../auth/guards'
 import { Request } from 'express'
 import { PaginationParams } from './dto/pagination.dto'
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user: {
     sub: string; 
     refreshToken: string; 

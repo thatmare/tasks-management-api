@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
 import { Document, HydratedDocument } from "mongoose"
 import { Type } from "class-transformer"
-import { Category } from "@app/features/categories/schemas/category.schema"
-import { User } from "@app/schemas/user.schema"
+import { Category } from "../../categories/schemas/category.schema"
+import { User } from "../../users/schemas/user.schema"
 import * as mongoose from 'mongoose'
 
 @Schema({

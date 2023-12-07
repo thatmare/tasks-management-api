@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto'
 import { AccessTokenGuard } from '../auth/guards'
 import { Request } from 'express'
 
-interface RequestWithUser extends Request {
+export interface RequestWithUser extends Request {
   user: any
 }
 

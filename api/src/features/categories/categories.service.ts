@@ -43,7 +43,7 @@ export class CategoriesService {
     const isCategoryRef = await this.ticketModel.exists({ category: id})
 
     if(isCategoryRef) {
-      throw new Error('Hay referencia')
+      throw new Error('There is a ticket referencing this category')
     }
 
     const deletedCategory = await this.categoryModel.findByIdAndDelete(id)
