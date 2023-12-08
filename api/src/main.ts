@@ -27,7 +27,7 @@ async function bootstrap() {
 
   // Setting OpenAPI docs
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('RESTful API project')
+    .setTitle('Marissa Vargas | RESTful API project')
     .setDescription('This is an RESTful API project for the SDJS-102 course.')
     .setVersion('1.0')
     .addBearerAuth()
