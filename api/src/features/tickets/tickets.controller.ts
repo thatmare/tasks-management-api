@@ -52,7 +52,8 @@ export class TicketsController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto, @Req() req: AuthenticatedRequest) {
     const ticket = await this.ticketsService.findOne(id)
-    if(ticket.asignee['_id'] !== req.user['sub']) {
+
+    if(ticket.asignee['_id'].toString() !== req.user['sub']) {
       throw new ForbiddenException('You are not allowed to update this ticket')
     }
 
@@ -63,7 +64,8 @@ export class TicketsController {
   @Delete(':id')
   async remove(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
     const ticket = await this.ticketsService.findOne(id)
-    if(ticket.asignee['_id'] !== req.user['sub']) {
+
+    if(ticket.asignee['_id'].toString() !== req.user['sub']) {
       throw new ForbiddenException('You are not allowed to delete this ticket')
     }
 
