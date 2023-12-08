@@ -1,0 +1,18 @@
+services:
+  app:
+    image: 'api-marissa:2'
+    restart: always
+    environment:
+      - THROTTLE_TTL=60
+      - THROTTLE_LIMIT=10
+      - LISTENING_PORT=4000
+      - MONGODB_URI='mongodb+srv://marissavargas:vKKoyqlzW3v9BmvM@cluster-thatmare.ia4c0ea.mongodb.net/?retryWrites=true&w=majority'
+      - JWT_ACCESS_SECRET='WE0d£7I7PRF7HRN%kW+-[W}NX9=o#UZY{!4HfkSLQbEp0oFZO6GThJ5sfPhEq9k0sZx47gt2525rvIJDaEPz7ZJ~rwnser+IvW>3'
+      - JWT_REFRESH_SECRET='=U3UV]qpu3L<;nY0rLSwndl[rlUM1zV0ks7IJo0ohoDsYSeNWOZc7iYha1lq5WN4P8O7e3LoBNM5$bH*i$e44$=Hpncu:f%=LJcf'
+      - JWT_RESET_SECRET='9HaKsS3U7?.XutFy47@ZKQj-C3ciOyg}ka{6pO}Fa.j[idYrFF8E3Im4%ISUBDs__>Ft(D-bu56XLUhx>W;9?_d9APU(B-<Q+d*%'
+        # ETHEREAL CREDENTIALS
+      - EMAIL_HOST='smtp.ethereal.email'
+      - EMAIL_PORT='587'
+      - EMAIL_ADDRESS='federico.gleason83@ethereal.email'
+      - EMAIL_PASSWORD='gpeWSgvSMn234C1PsR'
+      - NODE_ENV='development'
