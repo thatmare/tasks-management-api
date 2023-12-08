@@ -1,12 +1,14 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
 import { Document, HydratedDocument, ObjectId} from "mongoose"
 import { Transform } from "class-transformer"
+import { Factory } from "nestjs-seeder"
 
 @Schema()
 export class Category extends Document {
     @Transform(({ value }) => value.toString())
     _id: ObjectId
 
+    @Factory('school')
     @Prop({
         required: true,
         trim: true,
@@ -14,6 +16,7 @@ export class Category extends Document {
     })
     category: string
 
+    @Factory(faker => faker.lorem.paragraph(1))
     @Prop()
     description?: string
 }
